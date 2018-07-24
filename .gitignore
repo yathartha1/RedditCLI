@@ -1,0 +1,6 @@
+reddit/config.py
+dist/
+build/
+env/
+redditcli.egg-info/
+README.md
