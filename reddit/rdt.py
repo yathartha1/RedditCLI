@@ -243,4 +243,38 @@ class rdt:
             print("{0:<5} \33[31m {1} \33[5m".format('', 'Nothing to View'))
 
     def search(input):
-        pass
+        with open('reddit/variables.json', 'rb') as jsonf:
+            dictvals = pickle.load(jsonf)
+        jsonf.close()
+        if input != None:
+            dictvals['nextpreviousnormal'] = "False"
+            dictvals['nextprevioussubreddits'] = "False"
+            temp = 0
+            del dictvals['links'][:]
+            del dictvals['listofsubmissions'][:]
+            del dictvals['listofsubreddits'][:]
+            try:
+                searchs = reddit.subreddit('all').search(str(input),limit = 100)
+
+                for listvals in searchs:
+                    dictvals['listofsubmissions'].append(listvals)
+            except:
+                print("{0:<5} \33[31m {1} \33[5m".format('', 'Invalid Entry'))
+            else:
+                for i in range(0,len(dictvals['listofsubmissions'])):
+                    if temp<10:
+                        temp = temp + 1
+                        print("\33[92m {0:<4} \33[0m {1}".format(str(i + 1), dictvals['listofsubmissions'][i].title))
+                        print("{0:<5} \33[90m {1} \33[0m".format('', dictvals['listofsubmissions'][i].url))
+                        print("{0:<5} \33[90m {1} Upvotes with {2} Comments \33[0m".format('', str(dictvals['listofsubmissions'][i].ups), str(dictvals['listofsubmissions'][i].num_comments)))
+                        dictvals['links'].append(dictvals['listofsubmissions'][i].url)
+                dictvals['listed'] = "True"
+                dictvals['countlist'] = temp
+                if len(dictvals['listofsubmissions']) >= 10:
+                    print("\33[90m (\33[0m\33[93m {} \33[0m\33[90m) \33[0m".format('next'))
+                    dictvals['nextpreviousnormal'] = "True"
+            with open('reddit/variables.json', 'wb') as f:
+                pickle.dump(dictvals,f)
+            f.close()
+        else:
+            print("{0:<5} \33[31m {1} \33[5m".format('', 'Enter Something To Search'))
