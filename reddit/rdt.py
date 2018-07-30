@@ -185,7 +185,62 @@ class rdt:
                 print("{0:<5} \33[31m {1} \33[5m".format('', 'Nothing to Display'))
 
     def view(index, comments, more_comments):
-        pass
+        with open('reddit/variables.json', 'rb') as jsonf:
+            dictvals = pickle.load(jsonf)
+        jsonf.close()
+
+        def handleMoreComments():
+            temp = 0
+            if dictvals['countcomments'] < len(dictvals['listofcomments']):
+                for i in range(dictvals['countcomments'],len(dictvals['listofcomments'])):
+                    if (temp<10):
+                        temp = temp + 1
+                        print("\33[92m {0:<4} \33[0m {1}".format(str(i + 1), dictvals['listofcomments'][i].body))
+                        print("{0:<5} \33[90m Posted By {1}\33[0m".format('', str(dictvals['listofcomments'][i].author)))
+                        print("{0:<5} \33[90m {1} Upvotes\33[0m".format('', str(dictvals['listofcomments'][i].ups)))
+                dictvals['countcomments'] = dictvals['countcomments'] + temp
+            else:
+                print("{0:<5} \33[31m {1} \33[5m".format('', 'No More Entries Available'))
+
+        if dictvals['listed'] == "True" and len(dictvals['links']) != 0:
+            if index != None and comments == more_comments == False:
+                if int(index)<len(dictvals['links']) and int(index)>=0:
+                    webbrowser.open(dictvals['links'][int(index)])
+                else:
+                    print("{0:<5} \33[31m {1} \33[5m".format('', 'No Such Index'))
+
+            elif index != None and comments == True and more_comments == False:
+                if int(index)<len(dictvals['listofsubmissions']) and int(index)>=0:
+                    del dictvals['listofcomments'][:]
+                    comments = dictvals['listofsubmissions'][int(index)].comments
+                    for comment in comments:
+                        dictvals['listofcomments'].append(comment)
+
+                    if len(dictvals['listofcomments'])>=10:
+                        for i in range(0,10):
+                            print("\33[92m {0:<4} \33[0m {1}".format(str(i + 1), dictvals['listofcomments'][i].body))
+                            print("{0:<5} \33[90m Posted By {1}\33[0m".format('', str(dictvals['listofcomments'][i].author)))
+                            print("{0:<5} \33[90m {1} Upvotes\33[0m".format('', str(dictvals['listofcomments'][i].ups)))
+                        dictvals['countcomments'] = 10
+                    else:
+                        for i in range(0,len(dictvals['listofcomments'])):
+                            print("\33[92m {0:<4} \33[0m {1}".format(str(i + 1), dictvals['listofcomments'][i].body))
+                            print("{0:<5} \33[90m Posted By {1}\33[0m".format('', str(dictvals['listofcomments'][i].author)))
+                            print("{0:<5} \33[90m {1} Upvotes\33[0m".format('', str(dictvals['listofcomments'][i].ups)))
+                else:
+                    print("{0:<5} \33[31m {1} \33[5m".format('', 'No Such Index'))
+
+            elif index != None and comments == False and more_comments == True:
+                if len(dictvals['listofcomments']) != 0 and dictvals['countcomments'] == 10:
+                    handleMoreComments()
+                else:
+                    print("{0:<5} \33[31m {1} \33[5m".format('', 'Nothing to View'))
+
+            with open('reddit/variables.json', 'wb') as f:
+                pickle.dump(dictvals,f)
+            f.close()
+        else:
+            print("{0:<5} \33[31m {1} \33[5m".format('', 'Nothing to View'))
 
     def search(input):
         pass
