@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import webbrowser
 from .config import config
-import praw, json
+import praw
 import pickle
 
 cfg = config()

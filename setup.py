@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 setup(
     name = 'redditcli',
     version = '1.1.0',
-    description = 'A command line application that lets you search for different artists, albums, songs and their lyrics.',
+    description = 'A command line application that lets you browse Reddit.',
     long_description = long_description,
     long_description_content_type = "text/markdown",
     author = 'Yathartha Goel',
