@@ -5,7 +5,6 @@
 * Iterate through comments and post indexes.
 * Search for posts, comments, and users.
 * Clear all the commands on the screen.
-* Iterate through old commands using up/down keyboard press.
 
 ## Installation
 
