@@ -12,7 +12,8 @@ from prompt_toolkit.keys import Keys
 from pygments.token import Token
 from pygments.styles.tango import TangoStyle
 from prompt_toolkit.styles import style_from_pygments
-import subprocess, sys
+import subprocess, sys, pickle
+
 
 class redditcli:
     reddit_completer = WordCompleter(['ls', 'view', 'search', 'clear', '--move', '--subreddits', '--sort', '--index', '--comments', '--more-comments'], ignore_case = True)
@@ -64,6 +65,13 @@ class redditcli:
         subprocess.call(command, shell = True)
 
     def start(self):
+        dictvals = {"countlist": 0, "countcomments": 0, "tempvar": 0, "listed": "False", "nextpreviousnormal": "False", "nextprevioussubreddits": "False", "links": [], "listofsubmissions": [], "listofcomments": [], "listofsubreddits" : [],
+            "commands" : [] }
+        with open('reddit/variables.json', 'wb') as f:
+            pickle.dump(dictvals, f)
+        f.close()
         while True:
             document = self.cli.run(reset_current_buffer=True)
             self.commands(document)
+
+
