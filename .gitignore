@@ -1,5 +1,1 @@
 reddit/config.py
-dist/
-build/
-env/
-redditcli.egg-info/
